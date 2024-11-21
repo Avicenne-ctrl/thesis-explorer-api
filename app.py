@@ -35,11 +35,11 @@ def index():
         df_theses = pd.read_excel(EXCEL_QUERY_STORE_PATH)
         
         if not utilities_database.query_already_exist(df_theses, url_query):
-            print("updating the database because new request")
+            print("[INFO] : updating the database because new request")
             # can use selenium method of beautiful soup
             df_theses = utilities_database.update_database_selenium(df_theses, query)
         else:
-            print("url query found in excel because request already done")
+            print("[INFO] : url query found in excel because request already done")
             
         df_request = df_theses[df_theses["url_query"] == url_query]
         df_request.to_excel(EXCEL_TEMPORARY_QUERY_STORE_PATH, index= False)

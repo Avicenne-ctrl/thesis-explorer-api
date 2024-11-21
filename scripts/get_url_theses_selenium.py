@@ -5,6 +5,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+
+import chromedriver_autoinstaller
+
 import os
 import scripts.check_utilities as check_utilities
 import configparser
@@ -17,29 +20,23 @@ config.read('./scripts/config.ini')
 
 
 # Import config.ini var
-DRIVER_PATH_GOOGLE = config["DRIVER"]["DRIVER_PATH_GOOGLE"]
 PATH_THESES_HEAD   = config["DRIVER"]["PATH_THESES_HEAD"]
 PATH_THESES_TAIL   = config["DRIVER"]["PATH_THESES_TAIL"]
 TAG_PARENT         = config["DRIVER"]["TAG_PARENT"]
 TAG_HREF           = config["DRIVER"]["TAG_HREF"]
 
-# Check if correct driver path
-if not os.path.exists(DRIVER_PATH_GOOGLE):
-    raise TypeError(f"Provided driver_path_goole in ./scripts/config.ini doesn't exist, please download google driver or provide the path")
-if not isinstance(DRIVER_PATH_GOOGLE, str):
-    raise TypeError(f"Provided driver_path_goole in ./scripts/config.ini is not in the correct format, expected str got : {type(DRIVER_PATH_GOOGLE).__name__}")
-
-# Init chrome driver
-driver_path = Service(DRIVER_PATH_GOOGLE)
 options = Options()
 options.add_argument("--disable-extensions")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--headless")
 
+# Automatically install chromedriver
+chromedriver_autoinstaller.install()
+
 # python functions
 
-def init_chrome_driver(url_web_site: str, driver_path: Service = driver_path, options: Options = options):
+def init_chrome_driver(url_web_site: str, options: Options = options):
     """
         Initialize the google driver and check if the url is correct (https...)
 
@@ -74,7 +71,7 @@ def init_chrome_driver(url_web_site: str, driver_path: Service = driver_path, op
     check_utilities.check_correct_url(url_web_site) # url check
     
     # Initialisation du driver
-    driver = webdriver.Chrome(service=driver_path, options=options)
+    driver = webdriver.Chrome(options=options)
     driver.get(url_web_site)
     return driver
 

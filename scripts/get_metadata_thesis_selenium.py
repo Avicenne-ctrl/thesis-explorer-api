@@ -1,10 +1,13 @@
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import scripts.check_utilities as check_utilities
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from selenium.webdriver.chrome.options import Options
+
+import chromedriver_autoinstaller
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import scripts.check_utilities as check_utilities
+
+import pandas as pd
 import configparser
 import tqdm
 
@@ -12,8 +15,6 @@ import tqdm
 config = configparser.ConfigParser()
 config.read('./scripts/config.ini')
 
-# import config var
-DRIVER_PATH_GOOGLE = config["DRIVER"]["DRIVER_PATH_GOOGLE"]
 
 # TAG name for metadata extraction
 TAG_PARENT_THESE_TITLE     = 'div[data-v-d290f8ce]'
@@ -23,14 +24,15 @@ TAG_RESUME                 = "p[data-v-35e8592d]"
 TAG_PARENT_METADATA        = "div[data-v-c8bc896e]"
 TAG_METADATA               = "tr[data-v-276fb210]"
 
-# init chrome driver
-driver_path = Service(DRIVER_PATH_GOOGLE)
 
 options = Options()
 options.add_argument("--disable-extensions")
 options.add_argument("--disable-gpu")
 options.add_argument("--no-sandbox")
 options.add_argument("--headless")
+
+# Automatically install chromedriver
+chromedriver_autoinstaller.install()
 
 # python functiond
 
@@ -205,8 +207,7 @@ def get_all_metadata_thesis(list_url_these: list):
     if not isinstance(list_url_these, list):
         raise TypeError(f"The inut must be a list of url link, recieved : {type(list_url_these).__name__}")
     
-    driver_path = Service(DRIVER_PATH_GOOGLE)
-    driver_these = webdriver.Chrome(service=driver_path, options=options)
+    driver_these = webdriver.Chrome(options=options)
 
     metadata = pd.DataFrame()
     for url in tqdm.tqdm(list_url_these):  

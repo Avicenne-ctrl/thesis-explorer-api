@@ -180,17 +180,21 @@ def update_database_selenium(df_theses, query: str):
             query (str): 
                 the user query
     """
-    
+    print("[INFO] : get list of url thesis")
     list_url_theses, main_query_url= get_url_theses_selenium.get_all_url_theses(query) # get all theses url and the url query
     # if new request, we extract only info
+    
+    print("[INFO] : get metadata of each url thesis")
     df_metadata = get_metadata_thesis_selenium.get_all_metadata_thesis(list_url_theses) # list of dict with info for each url in the list
     df_metadata = condense_content_metadata_df(df_metadata)
     
     # we update the excel dataset
+    print("[INFO] : update Excel with new request")
     df_theses = update_excel_query_search(df_theses, df_metadata, main_query_url)
     df_theses.to_excel("./static/excel/df_query.xlsx", index=False)
     
     # we update the vector store
+    print("[INFO] : update vector store")
     update_db(df_theses)
     
     return df_theses

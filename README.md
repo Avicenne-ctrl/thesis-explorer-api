@@ -24,7 +24,7 @@ This Flask application allows users to search for theses based on specific queri
 ### 3. Modify the ./scripts/config.ini   
 The application uses a config.ini file to manage file paths and other essential parameters. 
 - Please provide in the file your personal Mistral API key if you want to use the LLM analysis functionality, by default it's None : `API_KEY = your_api_key`
-- You need to addapt the google driver in the folder ./GOOGLE_DRIVER, if you have a MacOs, Windows... By default : `DRIVER_PATH_GOOGLE = ./GOOGLE_DRIVER/chromedriver-mac-arm64/chromedriver`  
+- No need to adapt ChromeDriver for selenium, use of `chromedriver_autoinstaller`
 - You can also change the mistral model if you want, by default : `MISTRAL_MODEL = mistral-large-latest`
 - same for the embedder, by default : `MODEL_EMBEDDING = all-MiniLM-L6-v2`
 - If you want more result you can modify the number after 'nb=', by default 'nb=100': `PATH_THESES_TAIL = &page=1&nb=10&tri=pertinence&domaine=theses`
@@ -76,7 +76,7 @@ The database will be updating automaticaly
 
 ## Raises
 - One common raise can be the port of the server if it is already used, you can change it in the ./scripts/config.ini : `PORT_SERVER = 5050`. Usually it's 5000 or 5050.
-- Connection error during url theses scrapping on theses.fr
+- Connection error during url theses scrapping on theses.fr due to the chromedriver version
 
 ## Files description
 - get_url_theses_selenium.py :  
